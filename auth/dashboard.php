@@ -1,67 +1,67 @@
 <?php
 include 'config.php';
 
-// Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header('Location: login.php');
     exit();
 }
 
-$username = $_SESSION['username'];
-$role = $_SESSION['role'];
-?>
+if (($_SESSION['role'] ?? '') === 'admin') {
+    header('Location: ../admin/index.php');
+    exit();
+}
 
+$username = $_SESSION['username'] ?? '';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cafe POS - Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <title>Cafe POS · Terminal</title>
+    <link rel="stylesheet" href="terminal.css">
 </head>
-<body>
-    <a href="logout.php" class="logout-btn">Logout</a>
-    
-    <div class="dashboard">
-        <h1>Welcome, <?php echo htmlspecialchars($username); ?>!</h1>
-        
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Open POS Session</h5>
-                        <p class="card-text">Start a new point of sale session to handle transactions.</p>
-                        <a href="pos.php" class="btn-dashboard">Open POS</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Backend Configuration</h5>
-                        <p class="card-text">Manage system settings and configurations.</p>
-                        <a href="backend.php" class="btn-dashboard">Access Backend</a>
-                    </div>
-                </div>
+<body class="terminal-body">
+<div class="terminal-shell">
+    <header class="terminal-bar">
+        <div class="terminal-brand">
+            <span class="terminal-brand__mark">C</span>
+            <div class="terminal-brand__text">
+                <strong>Cafe POS</strong>
+                <span>Terminal</span>
             </div>
         </div>
-        
-        <?php if ($role == 'admin'): ?>
-        <div class="row mt-4">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Admin Panel</h5>
-                        <p class="card-text">Manage users and system administration.</p>
-                        <a href="admin.php" class="btn-dashboard">Admin Panel</a>
-                    </div>
-                </div>
-            </div>
+        <div class="terminal-bar__user">
+            <span class="terminal-bar__name">Signed in as <b><?php echo htmlspecialchars($username, ENT_QUOTES, 'UTF-8'); ?></b></span>
+            <a class="terminal-btn-logout" href="logout.php">Logout</a>
         </div>
-        <?php endif; ?>
+    </header>
+
+    <section class="terminal-hero">
+        <h1>Start selling</h1>
+        <p>Open a POS session to record orders and payments against today’s shift.</p>
+        <a class="terminal-btn-primary" href="pos.php">Open POS session →</a>
+    </section>
+
+    <div class="terminal-grid">
+        <a class="terminal-card" href="../pos/floor.php">
+            <h3>Floor &amp; tables</h3>
+            <p>Pick a table and take orders when a session is active.</p>
+            <span class="terminal-card__tag">Tables</span>
+        </a>
+        <a class="terminal-card" href="../pos/products.php">
+            <h3>Products</h3>
+            <p>Browse the menu and prices from the terminal.</p>
+            <span class="terminal-card__tag">Menu</span>
+        </a>
+        <a class="terminal-card" href="../pos/payments.php">
+            <h3>Payments</h3>
+            <p>Review payment options and recent activity.</p>
+            <span class="terminal-card__tag">Checkout</span>
+        </a>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <p class="terminal-hint">Admins sign in to the back office automatically. This screen is for staff on the floor.</p>
+</div>
 </body>
 </html>

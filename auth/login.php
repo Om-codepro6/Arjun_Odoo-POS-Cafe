@@ -17,7 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $username;
             $_SESSION['role'] = $user['role'];
-            header("Location: dashboard.php");
+            if ($user['role'] === 'admin') {
+                header('Location: ../admin/dashboard.php');
+            } else {
+                header('Location: ../pos/index.php');
+            }
             exit();
         }
     }
@@ -40,11 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="auth-card">
             <div class="auth-side">
                 <div>
-                    <div class="brand-badge">odoo Cafe</div>
+                    <div class="brand-badge">☕ odoo Cafe</div>
                     <h1>Welcome Back</h1>
-                    <p>"Welcome home. The coffee is brewing."</p>
+                    <p>"Welcome home. The coffee is brewing." ☕</p>
                 </div>
-                <div class="auth-side-footer">Trusted by cafe owners for a smooth, modern point-of-sale experience.</div>
+                <div class="auth-side-footer">Trusted by cafe owners for a smooth, modern point-of-sale experience. 🍵</div>
             </div>
             <div class="auth-form">
                 <div class="auth-header">
@@ -61,16 +65,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 <form action="login.php" method="POST">
                     <div class="form-group">
-                        <input type="text" class="form-control" name="username" placeholder="Username" required>
+                        <input type="text" class="form-control" name="username" placeholder="👤 Username" required>
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" name="password" placeholder="Password" required>
+                        <input type="password" class="form-control" name="password" placeholder="🔒 Password" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Login</button>
+                    <button type="submit" class="btn btn-primary">🔑 Login</button>
                 </form>
 
                 <div style="margin: 22px 0; text-align: center; color: var(--muted);">Don’t have an account yet?</div>
-                <a href="signup.php" class="btn btn-secondary">Create a new account</a>
+                <a href="signup.php" class="btn btn-secondary">📝 Create a new account</a>
             </div>
         </div>
     </div>

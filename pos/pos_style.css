@@ -1,0 +1,1131 @@
+/* ============================================
+   CAFE POS - SHARED STYLES
+   All POS pages use this CSS file
+   ============================================ */
+
+/* ---------- Google Font ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ---------- Color Variables ---------- */
+/* These are like "named colors" we can reuse everywhere */
+:root {
+    --brown-dark: #3b1f0b;
+    --brown: #5c3317;
+    --brown-light: #8b5e3c;
+    --cream: #fdf6ee;
+    --cream-dark: #f0e6d6;
+    --orange: #e8864a;
+    --orange-light: #f5a623;
+    --green: #2d6a4f;
+    --green-light: #40916c;
+    --red: #e63946;
+    --red-light: #ff6b6b;
+    --white: #ffffff;
+    --black: #1a1a1a;
+    --gray: #6b7280;
+    --gray-light: #e5e7eb;
+    --shadow: rgba(0, 0, 0, 0.15);
+    --glass-bg: rgba(255, 255, 255, 0.88);
+    --glass-border: rgba(255, 255, 255, 0.5);
+}
+
+/* ---------- Reset & Base Styles ---------- */
+/* Remove default spacing from all elements */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--black);
+    min-height: 100vh;
+    /* Cafe background image with dark overlay */
+    background: 
+        linear-gradient(180deg, rgba(30, 15, 5, 0.80), rgba(30, 15, 5, 0.85)),
+        url('images/cafe_bg.png') center / cover no-repeat fixed;
+}
+
+/* ---------- TOP NAVIGATION BAR ---------- */
+/* The bar at the top of every page */
+.top-nav {
+    background: var(--brown-dark);
+    padding: 0 30px;
+    display: flex;                /* puts items side by side */
+    align-items: center;         /* centers items vertically */
+    justify-content: space-between; /* pushes items to left & right */
+    height: 60px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    position: sticky;            /* stays at top when scrolling */
+    top: 0;
+    z-index: 100;               /* stays above other elements */
+}
+
+/* Logo / brand name on the left */
+.nav-brand {
+    color: var(--orange-light);
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-brand:hover {
+    color: var(--orange);
+}
+
+/* The dot before brand name */
+.nav-brand::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: var(--orange);
+    border-radius: 50%;
+}
+
+/* Menu links container */
+.nav-links {
+    display: flex;
+    gap: 8px;
+    list-style: none;       /* removes bullet points */
+}
+
+/* Each menu link */
+.nav-links a {
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.25s ease;  /* smooth hover effect */
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--white);
+    background: rgba(255,255,255,0.12);
+}
+
+/* Right side of nav (user info, logout) */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-user {
+    color: rgba(255,255,255,0.8);
+    font-size: 0.85rem;
+}
+
+.nav-logout {
+    color: var(--white);
+    background: var(--red);
+    text-decoration: none;
+    padding: 7px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+
+.nav-logout:hover {
+    background: var(--red-light);
+    transform: translateY(-1px);
+}
+
+
+/* ============================================
+   PAGE 1: POS DASHBOARD (index.php)
+   ============================================ */
+
+/* Main content area below the nav */
+.dashboard-content {
+    padding: 40px 30px;
+    max-width: 1200px;
+    margin: 0 auto;           /* centers the content */
+}
+
+/* Page title */
+.page-title {
+    color: var(--white);
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.page-title span {
+    color: var(--orange-light);
+}
+
+/* The POS terminal card */
+.terminal-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 480px;
+    box-shadow: 0 20px 60px var(--shadow);
+    backdrop-filter: blur(15px);
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.terminal-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+}
+
+/* Terminal name (Odoo Cafe) */
+.terminal-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--brown-dark);
+    margin-bottom: 15px;
+}
+
+/* Info row (Last open, Last sell) */
+.terminal-info {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 25px;
+}
+
+.terminal-info-item {
+    font-size: 0.85rem;
+    color: var(--gray);
+}
+
+.terminal-info-item strong {
+    display: block;
+    color: var(--black);
+    font-size: 1rem;
+    margin-top: 3px;
+}
+
+/* Open Session button */
+.btn-open-session {
+    display: inline-block;
+    padding: 14px 32px;
+    background: linear-gradient(135deg, var(--orange), var(--orange-light));
+    color: var(--white);
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(232, 134, 74, 0.35);
+}
+
+.btn-open-session:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(232, 134, 74, 0.45);
+}
+
+/* Three-dot menu button */
+.terminal-menu-btn {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    color: var(--gray);
+    padding: 5px;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.terminal-menu-btn:hover {
+    background: var(--gray-light);
+}
+
+/* Dropdown menu (hidden by default) */
+.terminal-dropdown {
+    display: none;                  /* hidden until clicked */
+    position: absolute;
+    top: 55px;
+    right: 25px;
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px var(--shadow);
+    min-width: 180px;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.terminal-dropdown.show {
+    display: block;               /* shown when "show" class added */
+}
+
+.terminal-dropdown a {
+    display: block;
+    padding: 12px 18px;
+    color: var(--black);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+
+.terminal-dropdown a:hover {
+    background: var(--cream);
+}
+
+
+/* ============================================
+   PAGE 2: FLOOR PLAN (floor.php)
+   ============================================ */
+
+/* Tab bar (Table | Register | Orders) */
+.tab-bar {
+    display: flex;
+    gap: 0;
+    background: var(--glass-bg);
+    border-radius: 14px;
+    padding: 5px;
+    max-width: 360px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+}
+
+.tab-btn {
+    flex: 1;                    /* each tab takes equal space */
+    padding: 10px 20px;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--gray);
+    text-decoration: none;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+.tab-btn:hover {
+    color: var(--brown-dark);
+    background: rgba(0,0,0,0.04);
+}
+
+.tab-btn.active {
+    background: var(--brown-dark);
+    color: var(--white);
+    box-shadow: 0 4px 12px rgba(59, 31, 11, 0.3);
+}
+
+/* Floor view label */
+.floor-label {
+    color: rgba(255,255,255,0.7);
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+/* Grid of tables */
+.tables-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);  /* 5 columns */
+    gap: 20px;
+    max-width: 700px;
+}
+
+/* Each table square */
+.table-card {
+    aspect-ratio: 1;           /* makes it a perfect square */
+    background: var(--glass-bg);
+    border: 2px solid var(--glass-border);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--brown-dark);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+.table-card:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 15px 40px rgba(232, 134, 74, 0.25);
+    border-color: var(--orange);
+    background: rgba(255,255,255,0.95);
+}
+
+.table-card .table-label {
+    font-size: 0.75rem;
+    color: var(--gray);
+    font-weight: 500;
+    margin-top: 4px;
+}
+
+/* Green color for occupied tables */
+.table-card.occupied {
+    border-color: var(--green);
+    background: rgba(45, 106, 79, 0.08);
+}
+
+.table-card.occupied:hover {
+    box-shadow: 0 15px 40px rgba(45, 106, 79, 0.25);
+    border-color: var(--green-light);
+}
+
+
+/* ============================================
+   PAGE 3: ORDER INTERFACE (order.php)
+   ============================================ */
+
+/* Main layout: products on left, sidebar on right */
+.order-layout {
+    display: flex;
+    height: calc(100vh - 60px);  /* full height minus navbar */
+}
+
+/* Left side: categories + products */
+.order-products {
+    flex: 1;                    /* takes up remaining space */
+    padding: 20px;
+    overflow-y: auto;           /* scroll if content is tall */
+    background: rgba(253, 246, 238, 0.95);
+}
+
+/* Category filter tabs */
+.category-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.category-btn {
+    padding: 8px 20px;
+    border-radius: 20px;
+    border: 2px solid var(--gray-light);
+    background: var(--white);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    color: var(--gray);
+}
+
+.category-btn:hover {
+    border-color: var(--orange);
+    color: var(--orange);
+}
+
+.category-btn.active {
+    background: var(--orange);
+    color: var(--white);
+    border-color: var(--orange);
+}
+
+.category-btn.cat-drinks.active {
+    background: var(--orange-light);
+    border-color: var(--orange-light);
+}
+
+.category-btn.cat-dessert.active {
+    background: var(--green);
+    border-color: var(--green);
+}
+
+/* Search bar */
+.search-bar {
+    width: 100%;
+    max-width: 350px;
+    padding: 10px 18px;
+    border: 2px solid var(--gray-light);
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-family: 'Inter', sans-serif;
+    margin-bottom: 20px;
+    transition: border-color 0.2s;
+    background: var(--white);
+}
+
+.search-bar:focus {
+    outline: none;
+    border-color: var(--orange);
+}
+
+/* Product grid */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+}
+
+/* Each product card */
+.product-card {
+    background: var(--white);
+    border: 2px solid transparent;
+    border-radius: 14px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+}
+
+.product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    border-color: var(--orange);
+}
+
+/* Product emoji/icon */
+.product-icon {
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* Product name */
+.product-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--black);
+    margin-bottom: 4px;
+}
+
+/* Product price */
+.product-price {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--orange);
+}
+
+/* ---- Right Sidebar: Order Summary ---- */
+.order-sidebar {
+    width: 340px;
+    background: var(--white);
+    border-left: 1px solid var(--gray-light);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Sidebar header */
+.sidebar-header {
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--gray-light);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--brown-dark);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Order items list */
+.order-items {
+    flex: 1;
+    padding: 15px 20px;
+    overflow-y: auto;
+}
+
+/* Each item in the order */
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray-light);
+    font-size: 0.88rem;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.order-item-name {
+    font-weight: 500;
+    color: var(--black);
+}
+
+.order-item-qty {
+    color: var(--gray);
+    font-size: 0.82rem;
+}
+
+.order-item-price {
+    font-weight: 600;
+    color: var(--brown);
+}
+
+/* Total section */
+.order-total {
+    padding: 15px 20px;
+    border-top: 2px solid var(--brown-dark);
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--brown-dark);
+}
+
+/* Numpad */
+.numpad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    padding: 10px 20px;
+}
+
+.numpad-btn {
+    padding: 12px;
+    border: 1px solid var(--gray-light);
+    border-radius: 10px;
+    background: var(--cream);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+}
+
+.numpad-btn:hover {
+    background: var(--cream-dark);
+}
+
+.numpad-btn:active {
+    transform: scale(0.95);
+}
+
+/* Quantity control buttons */
+.qty-controls {
+    display: flex;
+    gap: 8px;
+    padding: 10px 20px;
+    justify-content: center;
+}
+
+.qty-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    border: 1px solid var(--gray-light);
+    background: var(--white);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.qty-btn:hover {
+    background: var(--cream);
+    border-color: var(--orange);
+}
+
+.qty-btn.delete {
+    color: var(--red);
+    border-color: var(--red);
+}
+
+.qty-btn.delete:hover {
+    background: rgba(230, 57, 70, 0.1);
+}
+
+/* Bottom action buttons */
+.sidebar-actions {
+    padding: 15px 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-discard {
+    flex: 1;
+    padding: 14px;
+    border: 2px solid var(--red);
+    border-radius: 12px;
+    background: var(--white);
+    color: var(--red);
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.btn-discard:hover {
+    background: var(--red);
+    color: var(--white);
+}
+
+.btn-payment {
+    flex: 2;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--green), var(--green-light));
+    color: var(--white);
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 20px rgba(45, 106, 79, 0.3);
+    font-family: 'Inter', sans-serif;
+}
+
+.btn-payment:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(45, 106, 79, 0.4);
+}
+
+/* Empty order message */
+.order-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--gray);
+    font-size: 0.9rem;
+}
+
+.order-empty-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    display: block;
+}
+
+
+/* ============================================
+   PAGE 4: PAYMENT SCREEN (payments.php)
+   ============================================ */
+
+/* Center the payment card */
+.payment-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 60px);
+    padding: 30px;
+}
+
+/* Payment card */
+.payment-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 40px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 25px 70px var(--shadow);
+    backdrop-filter: blur(15px);
+}
+
+/* Payment title */
+.payment-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--brown-dark);
+    margin-bottom: 5px;
+}
+
+/* Amount display */
+.payment-amount {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--green);
+    margin-bottom: 30px;
+}
+
+/* Payment method buttons */
+.payment-methods {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.payment-method-btn {
+    flex: 1;
+    min-width: 100px;
+    padding: 14px 10px;
+    border: 2px solid var(--gray-light);
+    border-radius: 14px;
+    background: var(--white);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.25s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.payment-method-btn:hover {
+    border-color: var(--orange);
+    color: var(--orange);
+}
+
+.payment-method-btn.selected {
+    background: var(--brown-dark);
+    color: var(--white);
+    border-color: var(--brown-dark);
+}
+
+.payment-method-icon {
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Form fields in payment */
+.payment-field {
+    margin-bottom: 18px;
+}
+
+.payment-field label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--gray);
+    margin-bottom: 6px;
+}
+
+.payment-field select,
+.payment-field input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--gray-light);
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-family: 'Inter', sans-serif;
+    background: var(--white);
+    transition: border-color 0.2s;
+}
+
+.payment-field select:focus,
+.payment-field input:focus {
+    outline: none;
+    border-color: var(--orange);
+}
+
+/* Validate button */
+.btn-validate {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--green), var(--green-light));
+    color: var(--white);
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(45, 106, 79, 0.3);
+    margin-top: 10px;
+    font-family: 'Inter', sans-serif;
+}
+
+.btn-validate:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(45, 106, 79, 0.4);
+}
+
+/* Invoice toggle */
+.toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.toggle-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--black);
+}
+
+/* Simple toggle switch */
+.toggle-switch {
+    width: 48px;
+    height: 26px;
+    background: var(--gray-light);
+    border-radius: 13px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.toggle-switch.on {
+    background: var(--green);
+}
+
+.toggle-switch::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: var(--white);
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.toggle-switch.on::after {
+    transform: translateX(22px);
+}
+
+/* QR Code popup (for UPI) */
+.qr-overlay {
+    display: none;               /* hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    z-index: 200;
+    justify-content: center;
+    align-items: center;
+}
+
+.qr-overlay.show {
+    display: flex;
+}
+
+.qr-popup {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+    position: relative;
+    max-width: 360px;
+}
+
+.qr-popup h3 {
+    font-size: 1.3rem;
+    color: var(--brown-dark);
+    margin-bottom: 20px;
+}
+
+/* QR code placeholder */
+.qr-code-box {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 20px;
+    background: var(--cream);
+    border: 3px solid var(--black);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+}
+
+.qr-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--gray);
+    background: none;
+    border: none;
+    transition: color 0.2s;
+}
+
+.qr-close:hover {
+    color: var(--red);
+}
+
+
+/* ============================================
+   PAGE 5: RECEIPT / SUCCESS (receipt.php)
+   ============================================ */
+
+/* Center the receipt */
+.receipt-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 60px);
+    padding: 30px;
+}
+
+/* Receipt card */
+.receipt-card {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 50px 40px;
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    box-shadow: 0 25px 70px var(--shadow);
+}
+
+/* Green checkmark circle */
+.receipt-check {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--green), var(--green-light));
+    margin: 0 auto 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: var(--white);
+    box-shadow: 0 10px 30px rgba(45, 106, 79, 0.3);
+    /* Simple pulse animation */
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Pulse animation for checkmark */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Order number */
+.receipt-order-no {
+    font-size: 1.1rem;
+    color: var(--gray);
+    margin-bottom: 5px;
+}
+
+/* Amount paid */
+.receipt-amount {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--brown-dark);
+    margin-bottom: 8px;
+}
+
+.receipt-status {
+    color: var(--green);
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 35px;
+}
+
+/* Receipt buttons */
+.receipt-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-email-receipt {
+    flex: 1;
+    padding: 14px;
+    border: 2px solid var(--brown-dark);
+    border-radius: 12px;
+    background: var(--white);
+    color: var(--brown-dark);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-decoration: none;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+}
+
+.btn-email-receipt:hover {
+    background: var(--brown-dark);
+    color: var(--white);
+}
+
+.btn-continue {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--orange), var(--orange-light));
+    color: var(--white);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(232, 134, 74, 0.3);
+    font-family: 'Inter', sans-serif;
+}
+
+.btn-continue:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(232, 134, 74, 0.4);
+}
+
+
+/* ============================================
+   RESPONSIVE DESIGN
+   Makes pages look good on smaller screens
+   ============================================ */
+
+/* Tablets */
+@media (max-width: 900px) {
+    .order-layout {
+        flex-direction: column;
+    }
+    
+    .order-sidebar {
+        width: 100%;
+        max-height: 50vh;
+    }
+    
+    .tables-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Phones */
+@media (max-width: 600px) {
+    .top-nav {
+        padding: 0 15px;
+        height: 55px;
+    }
+    
+    .nav-links {
+        gap: 4px;
+    }
+    
+    .nav-links a {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .dashboard-content {
+        padding: 20px 15px;
+    }
+    
+    .tables-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .payment-card {
+        padding: 25px;
+    }
+    
+    .receipt-card {
+        padding: 35px 25px;
+    }
+    
+    .receipt-actions {
+        flex-direction: column;
+    }
+}

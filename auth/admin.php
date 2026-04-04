@@ -53,7 +53,7 @@ $users = $result->fetch_all(MYSQLI_ASSOC);
             </div>
         </div>
         
-        <a href="dashboard.php" class="btn-dashboard mt-4">Back to Dashboard</a>
+        <a href="../admin/index.php" class="btn-dashboard mt-4">Back to admin home</a>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
