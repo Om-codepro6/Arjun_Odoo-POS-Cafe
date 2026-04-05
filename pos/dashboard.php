@@ -170,50 +170,6 @@ body {
   background: var(--primary-gradient);
 }
 
-/* ===== NAV DROPDOWN ===== */
-.nav-dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: #1a1a1a;
-  border: 1px solid var(--border-color);
-  border-top: none;
-  display: none;
-  flex-direction: column;
-  gap: 0;
-  min-width: 200px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-  z-index: 100;
-}
-
-.nav-dropdown.show {
-  display: flex;
-}
-
-.nav-dropdown a {
-  padding: 14px 20px;
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  border-bottom: 1px solid rgba(216, 180, 254, 0.1);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.nav-dropdown a:last-child {
-  border-bottom: none;
-}
-
-.nav-dropdown a:hover {
-  background: rgba(216, 180, 254, 0.15);
-  color: var(--primary-light);
-  padding-left: 24px;
-}
-
-
-
 /* ===== MAIN CONTENT ===== */
 .main-content {
   flex: 1;
@@ -251,7 +207,6 @@ body {
   flex-direction: column;
   transition: all 0.3s ease;
   height: 420px;
-  border-radius: 30px;
 }
 
 .dashboard-card:hover {
@@ -280,12 +235,17 @@ body {
   letter-spacing: 0.5px;
 }
 
+.card-header-icon {
+  font-size: 24px;
+}
+
 .menu-icon {
   cursor: pointer;
   font-size: 20px;
   color: #000;
   transition: all 0.3s ease;
   padding: 5px;
+  border-radius: 0;
 }
 
 .menu-icon:hover {
@@ -299,6 +259,7 @@ body {
   right: 30px;
   background: #1a1a1a;
   border: 1px solid var(--border-color);
+  border-radius: 0;
   display: none;
   flex-direction: column;
   width: 200px;
@@ -340,7 +301,7 @@ body {
 }
 
 .card-stat {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .card-stat-label {
@@ -360,13 +321,14 @@ body {
 }
 
 .card-stat-icon {
-  font-size: 18px;
-  margin-right: 6px;
+  font-size: 20px;
+  margin-right: 8px;
 }
 
 /* ===== BUTTONS ===== */
 .btn {
   border: none;
+  border-radius: 0;
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s ease;
@@ -374,7 +336,6 @@ body {
   letter-spacing: 1px;
   font-size: 12px;
   padding: 14px 28px;
-  border-radius: 0;
 }
 
 .btn-primary {
@@ -399,6 +360,19 @@ body {
   color: var(--text-primary);
 }
 
+.btn-link {
+  background: transparent;
+  border: 1px solid rgba(216, 180, 254, 0.3);
+  color: var(--text-primary);
+  padding: 8px 14px;
+  font-size: 11px;
+}
+
+.btn-link:hover {
+  background: rgba(216, 180, 254, 0.1);
+  border-color: rgba(216, 180, 254, 0.5);
+}
+
 /* ===== CHECKBOX ===== */
 .checkbox-group {
   display: flex;
@@ -419,27 +393,6 @@ input[type="checkbox"] {
   color: var(--text-secondary);
   font-weight: 500;
   cursor: pointer;
-}
-
-/* Status Badge */
-.status-badge {
-  display: inline-block;
-  font-size: 12px;
-  padding: 6px 12px;
-  border-radius: 0;
-  font-weight: 600;
-}
-
-.status-active {
-  color: var(--primary-light);
-  background: rgba(216, 180, 254, 0.1);
-  border: 1px solid rgba(216, 180, 254, 0.2);
-}
-
-.status-inactive {
-  color: var(--text-tertiary);
-  background: rgba(100, 100, 100, 0.1);
-  border: 1px solid rgba(100, 100, 100, 0.2);
 }
 
 /* ===== MODAL ===== */
@@ -465,6 +418,7 @@ input[type="checkbox"] {
   max-width: 900px;
   border: 1px solid var(--border-color);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+  border-radius: 0;
   animation: slideDown 0.3s ease-out;
 }
 
@@ -500,37 +454,35 @@ input[type="checkbox"] {
   border-top: 1px solid var(--border-color);
 }
 
-/* Table Styles */
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
+/* ===== FORMS ===== */
+.form-group {
+  margin-bottom: 20px;
 }
 
-.data-table thead {
-  background: #1a1a1a;
-}
-
-.data-table th {
-  padding: 14px;
-  text-align: left;
-  font-size: 11px;
-  color: var(--text-tertiary);
-  font-weight: 700;
+.form-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 1px;
-  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 8px;
 }
 
-.data-table td {
-  padding: 14px;
+.form-input {
+  width: 100%;
+  background: #1a1a1a;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 12px 16px;
   font-size: 13px;
-  color: var(--text-secondary);
-  border-bottom: 1px solid #1a1a1a;
+  outline: none;
+  transition: all 0.3s ease;
 }
 
-.data-table tr:hover {
-  background: rgba(216, 180, 254, 0.03);
+.form-input:focus {
+  border-color: var(--primary-light);
+  background: rgba(216, 180, 254, 0.05);
 }
 
 /* ===== RESPONSIVE ===== */
@@ -543,7 +495,6 @@ input[type="checkbox"] {
   .navigation {
     padding: 0 20px;
     gap: 30px;
-    overflow-x: auto;
   }
 
   .main-content {
@@ -577,27 +528,9 @@ input[type="checkbox"] {
 
 <!-- ===== NAVIGATION ===== -->
 <div class="navigation">
-  <div style="position: relative;">
-    <button class="nav-item active" onclick="toggleNavDropdown(this)">📋 Orders</button>
-    <div class="nav-dropdown">
-      <a href="orders.php">📊 View Orders</a>
-      <a href="customers.php">👥 Customer</a>
-      <a href="payments_list.php">💳 Payment History</a>
-    </div>
-  </div>
-  <div style="position: relative;">
-    <button class="nav-item" onclick="toggleNavDropdown(this)">🍽️ Products</button>
-    <div class="nav-dropdown">
-      <a href="products_management.php">➕ Manage Products</a>
-      <a href="categories.php">📂 Category</a>
-    </div>
-  </div>
-  <div style="position: relative;">
-    <button class="nav-item" onclick="toggleNavDropdown(this)">📊 Reporting</button>
-    <div class="nav-dropdown">
-      <a href="dashboard.php">📁 Dashboard</a>
-    </div>
-  </div>
+  <button class="nav-item active" onclick="switchNav(this)">📋 Orders</button>
+  <button class="nav-item" onclick="switchNav(this)">🍽️ Products</button>
+  <button class="nav-item" onclick="switchNav(this)">📊 Reporting</button>
 </div>
 
 <!-- ===== MAIN CONTENT ===== -->
@@ -617,7 +550,7 @@ input[type="checkbox"] {
           <div class="menu-icon" onclick="toggleDropdown(this)">⋮</div>
           <div class="card-dropdown">
             <a href="settings.php">⚙️ Settings</a>
-            <a href="kitchen_display.php">👨‍🍳 Kitchen Display</a>
+            <a href="kitchen.php">👨‍🍳 Kitchen Display</a>
             <a href="customer_display.php">👥 Customer Display</a>
           </div>
         </div>
@@ -638,8 +571,8 @@ input[type="checkbox"] {
           </div>
         </div>
 
-        <a href="pos_terminal.php" class="btn btn-primary" style="text-align: center; text-decoration: none; display: block;">
-          🔓 Open Session
+        <a href="<?php echo $has_open_session ? '../auth/end_session.php' : '../auth/pos.php'; ?>" class="btn btn-primary" style="text-align: center; text-decoration: none;">
+          <?php echo $has_open_session ? '🔒 Close Session' : '🔓 Open Session'; ?>
         </a>
       </div>
     </div>
@@ -653,17 +586,15 @@ input[type="checkbox"] {
         </h2>
       </div>
       <div class="card-body">
-        <div>
-          <div class="checkbox-group">
-            <input type="checkbox" id="floorCheck" checked>
-            <label for="floorCheck" class="checkbox-label">Enable Floor Plan Management</label>
-          </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="floorCheck" checked>
+          <label for="floorCheck" class="checkbox-label">Enable Floor Plan Management</label>
+        </div>
 
-          <div style="margin-bottom: 20px; margin-top: 20px;">
-            <div class="card-stat-label">Ground Floor - 8 Tables</div>
-            <div style="color: var(--text-secondary); font-size: 13px; margin-top: 8px;">
-              Status: <span class="status-badge status-active">● Active</span>
-            </div>
+        <div style="margin-bottom: 20px;">
+          <div class="card-stat-label">Ground Floor - 8 Tables</div>
+          <div style="color: var(--text-secondary); font-size: 13px; margin-top: 8px;">
+            Status: <span style="color: var(--primary-light);">● Active</span>
           </div>
         </div>
 
@@ -684,63 +615,59 @@ input[type="checkbox"] {
       <h3>📋 Floor Configuration - Ground Floor</h3>
     </div>
     <div class="modal-body">
-      <div style="margin-bottom: 20px;">
-        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Floor Name</label>
-        <input type="text" value="Ground Floor" style="width: 100%; background: #1a1a1a; border: 1px solid var(--border-color); color: var(--text-primary); padding: 12px 16px; font-size: 13px; outline: none;">
+      <div class="form-group">
+        <label class="form-label">Floor Name</label>
+        <input type="text" class="form-input" value="Ground Floor" placeholder="Enter floor name">
       </div>
 
       <div style="margin-bottom: 20px;">
-        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">POS Location</label>
-        <select style="width: 100%; background: #1a1a1a; border: 1px solid var(--border-color); color: var(--text-primary); padding: 12px 16px; font-size: 13px; outline: none;">
+        <label class="form-label">POS Location</label>
+        <select class="form-input">
           <option>Odoo Cafe</option>
           <option>Main Restaurant</option>
         </select>
       </div>
 
-      <div style="margin-bottom: 30px;">
-        <h4 style="font-size: 13px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; font-weight: 600;">Available Tables</h4>
-        <table class="data-table">
+      <div style="margin-bottom: 20px;">
+        <h4 style="font-size: 13px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; font-weight: 600;">Available Tables</h4>
+        <table style="width: 100%; border-collapse: collapse;">
           <thead>
-            <tr>
-              <th width="40"><input type="checkbox" id="masterCheck" onchange="selectAllTables(this)"></th>
-              <th>Table</th>
-              <th>Seats</th>
-              <th>Status</th>
+            <tr style="background: #1a1a1a; border-bottom: 1px solid var(--border-color);">
+              <th style="padding: 12px; text-align: left; font-size: 11px; color: var(--text-tertiary); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">
+                <input type="checkbox" id="masterCheck" onchange="selectAllTables(this)">
+              </th>
+              <th style="padding: 12px; text-align: left; font-size: 11px; color: var(--text-tertiary); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Table</th>
+              <th style="padding: 12px; text-align: left; font-size: 11px; color: var(--text-tertiary); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Seats</th>
+              <th style="padding: 12px; text-align: left; font-size: 11px; color: var(--text-tertiary); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Status</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td><input type="checkbox" class="table-check"></td>
-              <td>Table 101</td>
-              <td>5</td>
-              <td><span class="status-badge status-active">● Active</span></td>
+          <tbody id="tableList">
+            <tr style="border-bottom: 1px solid var(--border-color);">
+              <td style="padding: 12px;"><input type="checkbox" class="table-check"></td>
+              <td style="padding: 12px; color: var(--text-secondary); font-size: 13px;">Table 101</td>
+              <td style="padding: 12px; color: var(--text-secondary); font-size: 13px;">5</td>
+              <td style="padding: 12px;"><span style="font-size: 11px; color: var(--primary-light); background: rgba(216, 180, 254, 0.1); padding: 4px 10px;">Active</span></td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-color);">
+              <td style="padding: 12px;"><input type="checkbox" class="table-check"></td>
+              <td style="padding: 12px; color: var(--text-secondary); font-size: 13px;">Table 102</td>
+              <td style="padding: 12px; color: var(--text-secondary); font-size: 13px;">8</td>
+              <td style="padding: 12px;"><span style="font-size: 11px; color: #888; background: rgba(100, 100, 100, 0.1); padding: 4px 10px;">Inactive</span></td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-color);">
+              <td style="padding: 12px;"><input type="checkbox" class="table-check"></td>
+              <td style="padding: 12px; color: var(--text-secondary); font-size: 13px;">Table 103</td>
+              <td style="padding: 12px; color: var(--text-secondary); font-size: 13px;">4</td>
+              <td style="padding: 12px;"><span style="font-size: 11px; color: var(--primary-light); background: rgba(216, 180, 254, 0.1); padding: 4px 10px;">Active</span></td>
             </tr>
             <tr>
-              <td><input type="checkbox" class="table-check"></td>
-              <td>Table 102</td>
-              <td>8</td>
-              <td><span class="status-badge status-inactive">● Inactive</span></td>
-            </tr>
-            <tr>
-              <td><input type="checkbox" class="table-check"></td>
-              <td>Table 103</td>
-              <td>4</td>
-              <td><span class="status-badge status-active">● Active</span></td>
-            </tr>
-            <tr>
-              <td><input type="checkbox" class="table-check"></td>
-              <td>Table 104</td>
-              <td>2</td>
-              <td><span class="status-badge status-active">● Active</span></td>
+              <td style="padding: 12px;"><input type="checkbox" class="table-check"></td>
+              <td style="padding: 12px; color: var(--text-secondary); font-size: 13px;">Table 104</td>
+              <td style="padding: 12px; color: var(--text-secondary); font-size: 13px;">2</td>
+              <td style="padding: 12px;"><span style="font-size: 11px; color: var(--primary-light); background: rgba(216, 180, 254, 0.1); padding: 4px 10px;">Active</span></td>
             </tr>
           </tbody>
         </table>
-      </div>
-
-      <div style="margin-bottom: 20px; display: flex; gap: 12px;">
-        <input type="text" id="newTableName" placeholder="Table Name" style="flex: 1; background: #1a1a1a; border: 1px solid var(--border-color); color: var(--text-primary); padding: 12px 16px; font-size: 13px; outline: none;">
-        <input type="number" id="newTableSeats" placeholder="Seats" min="1" max="20" style="width: 80px; background: #1a1a1a; border: 1px solid var(--border-color); color: var(--text-primary); padding: 12px 16px; font-size: 13px; outline: none;">
-        <button class="btn btn-primary" onclick="addTable()" style="padding: 12px 24px;">➕ Add Table</button>
       </div>
     </div>
     <div class="modal-footer">
@@ -784,47 +711,6 @@ function switchNav(element) {
 
 function selectAllTables(checkbox) {
   document.querySelectorAll('.table-check').forEach(el => el.checked = checkbox.checked);
-}
-
-function toggleNavDropdown(element) {
-  const dropdown = element.nextElementSibling;
-  dropdown.classList.toggle('show');
-  
-  // Close other nav dropdowns
-  document.querySelectorAll('.nav-dropdown').forEach(el => {
-    if (el !== dropdown) el.classList.remove('show');
-  });
-}
-
-// Close nav dropdown when clicking outside
-document.addEventListener('click', function(event) {
-  if (!event.target.closest('div[style*="position: relative"]')) {
-    document.querySelectorAll('.nav-dropdown').forEach(el => el.classList.remove('show'));
-  }
-});
-
-function addTable() {
-  const tableName = document.getElementById('newTableName').value.trim();
-  const tableSeats = document.getElementById('newTableSeats').value.trim();
-  
-  if (!tableName || !tableSeats) {
-    alert('Please enter table name and seats');
-    return;
-  }
-  
-  const tableBody = document.querySelector('.data-table tbody');
-  const newRow = tableBody.insertRow();
-  
-  newRow.innerHTML = `
-    <td><input type="checkbox" class="table-check"></td>
-    <td>${tableName}</td>
-    <td>${tableSeats}</td>
-    <td><span class="status-badge status-active">● Active</span></td>
-  `;
-  
-  // Clear inputs
-  document.getElementById('newTableName').value = '';
-  document.getElementById('newTableSeats').value = '';
 }
 </script>
 
