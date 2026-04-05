@@ -15,6 +15,31 @@ $open_session_query = $conn->prepare("SELECT id FROM pos_sessions WHERE user_id 
 $open_session_query->bind_param('i', $current_user_id);
 $open_session_query->execute();
 $has_open_session = $open_session_query->get_result()->num_rows > 0;
+
+// Get floor and table data
+$floor_query = $conn->query("
+    SELECT f.id, f.name,
+    (SELECT COUNT(*) FROM restaurant_tables WHERE floor_id = f.id) as table_count,
+    (SELECT COUNT(*) FROM restaurant_tables WHERE floor_id = f.id AND status = 'available') as available_count
+    FROM floors f
+    LIMIT 1
+");
+$current_floor = $floor_query->fetch_assoc();
+if (!$current_floor) {
+    $current_floor = ['id' => 1, 'name' => 'Ground Floor', 'table_count' => 0, 'available_count' => 0];
+}
+
+// Get all tables for current floor
+$tables_query = $conn->prepare("
+    SELECT id, table_number, seats, status 
+    FROM restaurant_tables 
+    WHERE floor_id = ? 
+    ORDER BY id ASC
+");
+$floor_id = $current_floor['id'];
+$tables_query->bind_param('i', $floor_id);
+$tables_query->execute();
+$all_tables = $tables_query->get_result()->fetch_all(MYSQLI_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -595,7 +620,7 @@ input[type="checkbox"] {
   <div style="position: relative;">
     <button class="nav-item" onclick="toggleNavDropdown(this)">📊 Reporting</button>
     <div class="nav-dropdown">
-      <a href="dashboard.php">📁 Dashboard</a>
+      <a href="reporting_dashboard.php">📈 Dashboard</a>
     </div>
   </div>
 </div>
@@ -660,9 +685,10 @@ input[type="checkbox"] {
           </div>
 
           <div style="margin-bottom: 20px; margin-top: 20px;">
-            <div class="card-stat-label">Ground Floor - 8 Tables</div>
+            <div class="card-stat-label"><?php echo htmlspecialchars($current_floor['name']); ?> - <?php echo $current_floor['table_count']; ?> Tables</div>
             <div style="color: var(--text-secondary); font-size: 13px; margin-top: 8px;">
               Status: <span class="status-badge status-active">● Active</span>
+              <span style="margin-left: 10px;"><?php echo $current_floor['available_count']; ?>/<?php echo $current_floor['table_count']; ?> Available</span>
             </div>
           </div>
         </div>
@@ -681,12 +707,12 @@ input[type="checkbox"] {
 <div id="floorModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
-      <h3>📋 Floor Configuration - Ground Floor</h3>
+      <h3>📋 Floor Configuration - <?php echo htmlspecialchars($current_floor['name']); ?></h3>
     </div>
     <div class="modal-body">
       <div style="margin-bottom: 20px;">
         <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Floor Name</label>
-        <input type="text" value="Ground Floor" style="width: 100%; background: #1a1a1a; border: 1px solid var(--border-color); color: var(--text-primary); padding: 12px 16px; font-size: 13px; outline: none;">
+        <input type="text" id="floorName" value="<?php echo htmlspecialchars($current_floor['name']); ?>" style="width: 100%; background: #1a1a1a; border: 1px solid var(--border-color); color: var(--text-primary); padding: 12px 16px; font-size: 13px; outline: none;">
       </div>
 
       <div style="margin-bottom: 20px;">
@@ -708,31 +734,23 @@ input[type="checkbox"] {
               <th>Status</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
+          <tbody id="tablesTableBody">
+            <?php if (empty($all_tables)): ?>
+            <tr><td colspan="4" style="text-align: center; padding: 20px; color: var(--text-secondary);">No tables configured yet</td></tr>
+            <?php else: ?>
+            <?php foreach ($all_tables as $table): ?>
+            <tr data-table-id="<?php echo $table['id']; ?>">
               <td><input type="checkbox" class="table-check"></td>
-              <td>Table 101</td>
-              <td>5</td>
-              <td><span class="status-badge status-active">● Active</span></td>
+              <td><?php echo htmlspecialchars($table['table_number']); ?></td>
+              <td><?php echo $table['seats']; ?></td>
+              <td>
+                <span class="status-badge <?php echo $table['status'] === 'available' ? 'status-active' : 'status-inactive'; ?>">
+                  ● <?php echo ucfirst($table['status']); ?>
+                </span>
+              </td>
             </tr>
-            <tr>
-              <td><input type="checkbox" class="table-check"></td>
-              <td>Table 102</td>
-              <td>8</td>
-              <td><span class="status-badge status-inactive">● Inactive</span></td>
-            </tr>
-            <tr>
-              <td><input type="checkbox" class="table-check"></td>
-              <td>Table 103</td>
-              <td>4</td>
-              <td><span class="status-badge status-active">● Active</span></td>
-            </tr>
-            <tr>
-              <td><input type="checkbox" class="table-check"></td>
-              <td>Table 104</td>
-              <td>2</td>
-              <td><span class="status-badge status-active">● Active</span></td>
-            </tr>
+            <?php endforeach; ?>
+            <?php endif; ?>
           </tbody>
         </table>
       </div>
@@ -745,7 +763,7 @@ input[type="checkbox"] {
     </div>
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="toggleFloorModal(false)">← Cancel</button>
-      <button class="btn btn-primary" onclick="toggleFloorModal(false)">✓ Save Changes</button>
+      <button class="btn btn-primary" onclick="saveFloorChanges()">✓ Save Changes</button>
     </div>
   </div>
 </div>
@@ -772,6 +790,7 @@ function toggleFloorModal(show) {
   const modal = document.getElementById('floorModal');
   if (show) {
     modal.classList.add('show');
+    loadFloorTables();
   } else {
     modal.classList.remove('show');
   }
@@ -803,7 +822,62 @@ document.addEventListener('click', function(event) {
   }
 });
 
-function addTable() {
+async function loadFloorTables() {
+  try {
+    const response = await fetch('../api/manage_tables.php?action=get_floor_tables&floor_id=1');
+    const data = await response.json();
+    
+    if (data.success) {
+      const tbody = document.getElementById('tablesTableBody');
+      tbody.innerHTML = '';
+      
+      data.tables.forEach(table => {
+        const row = tbody.insertRow();
+        row.dataset.tableId = table.id;
+        row.innerHTML = `
+          <td><input type="checkbox" class="table-check"></td>
+          <td>${table.table_number}</td>
+          <td>${table.seats}</td>
+          <td><span class="status-badge ${table.status === 'available' ? 'status-active' : 'status-inactive'}">● ${table.status.charAt(0).toUpperCase() + table.status.slice(1)}</span></td>
+        `;
+      });
+    }
+  } catch (error) {
+    console.error('Error loading floor tables:', error);
+  }
+}
+
+async function updateOpenSessionTables() {
+  try {
+    const response = await fetch('../api/manage_tables.php?action=get_floor_tables&floor_id=1');
+    const data = await response.json();
+    
+    if (data.success) {
+      const openSessionList = document.getElementById('openSessionTablesList');
+      openSessionList.innerHTML = '';
+      
+      data.tables.forEach(table => {
+        const tableDiv = document.createElement('div');
+        tableDiv.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(216, 180, 254, 0.1);';
+        
+        const statusClass = table.status === 'available' ? 'status-active' : 'status-inactive';
+        const statusText = table.status.charAt(0).toUpperCase() + table.status.slice(1);
+        
+        tableDiv.innerHTML = `
+          <span style="font-size: 13px; font-weight: 500;">${table.table_number}</span>
+          <span style="font-size: 12px; color: var(--text-tertiary); margin: 0 10px;">${table.seats} seats</span>
+          <span class="status-badge ${statusClass}">● ${statusText}</span>
+        `;
+        
+        openSessionList.appendChild(tableDiv);
+      });
+    }
+  } catch (error) {
+    console.error('Error updating open session tables:', error);
+  }
+}
+
+async function addTable() {
   const tableName = document.getElementById('newTableName').value.trim();
   const tableSeats = document.getElementById('newTableSeats').value.trim();
   
@@ -812,20 +886,79 @@ function addTable() {
     return;
   }
   
-  const tableBody = document.querySelector('.data-table tbody');
-  const newRow = tableBody.insertRow();
-  
-  newRow.innerHTML = `
-    <td><input type="checkbox" class="table-check"></td>
-    <td>${tableName}</td>
-    <td>${tableSeats}</td>
-    <td><span class="status-badge status-active">● Active</span></td>
-  `;
-  
-  // Clear inputs
-  document.getElementById('newTableName').value = '';
-  document.getElementById('newTableSeats').value = '';
+  try {
+    const response = await fetch('../api/manage_tables.php?action=add_table', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        floor_id: 1,
+        table_number: tableName,
+        seats: parseInt(tableSeats)
+      })
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      document.getElementById('newTableName').value = '';
+      document.getElementById('newTableSeats').value = '';
+      loadFloorTables();
+      updateFloorStats();
+      updateOpenSessionTables();
+      alert('✓ Table added successfully!');
+    } else {
+      alert('Error: ' + data.error);
+    }
+  } catch (error) {
+    console.error('Error adding table:', error);
+    alert('Failed to add table');
+  }
 }
+
+async function saveFloorChanges() {
+  toggleFloorModal(false);
+  updateFloorStats();
+  updateOpenSessionTables();
+}
+
+async function updateFloorStats() {
+  try {
+    const response = await fetch('../api/manage_tables.php?action=get_floor_tables&floor_id=1');
+    const data = await response.json();
+    
+    if (data.success) {
+      // Update the floor configuration card
+      const tableCountElements = document.querySelectorAll('.card-stat-label');
+      const statusElements = document.querySelectorAll('.status-badge');
+      
+      const available = data.tables.filter(t => t.status === 'available').length;
+      const total = data.tables.length;
+      
+      // Find and update the floor stats in the card
+      const cards = document.querySelectorAll('.dashboard-card');
+      const floorCard = Array.from(cards).find(card => 
+        card.textContent.includes('Floor Configuration')
+      );
+      
+      if (floorCard) {
+        const statsDiv = floorCard.querySelector('.card-stat-label');
+        if (statsDiv) {
+          statsDiv.textContent = `Ground Floor - ${total} Tables`;
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error updating floor stats:', error);
+  }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+  updateFloorStats();
+  updateOpenSessionTables();
+});
 </script>
 
 </body>

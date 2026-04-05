@@ -1,3 +1,10 @@
+<?php
+session_start();
+include '../config/db.php';
+include '../includes/auth_check.php';
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 1;
+$table_id = isset($_GET['table']) ? intval($_GET['table']) : 1;
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -289,6 +296,7 @@
         let totalAmount = 0;
         let cartItems = [];
         let userName = 'Customer';
+        let currentTableId = null;
 
         // Get data from URL parameters or sessionStorage
         function initPayment() {
@@ -296,6 +304,7 @@
             totalAmount = parseFloat(params.get('amount')) || parseFloat(sessionStorage.getItem('paymentAmount')) || 0;
             cartItems = JSON.parse(sessionStorage.getItem('cartItems')) || [];
             userName = sessionStorage.getItem('userName') || 'Customer';
+            currentTableId = parseInt(sessionStorage.getItem('currentTable')) || 1;
             
             document.getElementById('displayAmount').textContent = '$ ' + totalAmount.toFixed(2);
         }
@@ -392,11 +401,60 @@
             html2pdf().set(opt).from(element).save();
         }
 
-        function completePayment() {
-            setTimeout(() => {
-                sessionStorage.setItem('paymentConfirmed', 'true');
-                window.location.href = 'pos_terminal.php?paymentComplete=true';
-            }, 1000);
+        async function completePayment() {
+            try {
+                // Save order to database
+                const orderResponse = await fetch('../api/save_order.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        tableId: currentTableId || 1,
+                        items: cartItems,
+                        totalAmount: totalAmount,
+                        sessionId: null
+                    })
+                });
+
+                const orderData = await orderResponse.json();
+                
+                if (!orderData.success) {
+                    console.error('Order save error:', orderData.error);
+                }
+
+                const orderId = orderData.order_id;
+
+                // Save payment to database
+                const paymentResponse = await fetch('../api/save_payment.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        orderId: orderId,
+                        amount: totalAmount,
+                        paymentMethod: sessionStorage.getItem('paymentMethod') || 'cash',
+                        transactionId: sessionStorage.getItem('upiId') || null
+                    })
+                });
+
+                const paymentData = await paymentResponse.json();
+                
+                if (!paymentData.success) {
+                    console.error('Payment save error:', paymentData.error);
+                }
+
+                // Complete payment flow
+                setTimeout(() => {
+                    sessionStorage.setItem('paymentConfirmed', 'true');
+                    window.location.href = 'pos_terminal.php?paymentComplete=true';
+                }, 1000);
+
+            } catch (error) {
+                console.error('Payment completion error:', error);
+                alert('Error processing payment. Please try again.');
+            }
         }
 
         function openModal(modalId) {
